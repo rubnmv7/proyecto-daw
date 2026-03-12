@@ -1,0 +1,704 @@
+:root {
+  --bg: #110c1f;
+  --card: #10101b;
+  --primary: #7e3cff;
+  --primary-dark: #6528d4;
+  --text: #e6e9f5;
+  --muted: #8e92a8;
+  --panel-bg: rgba(24, 24, 41, 0.5);
+  --panel-border: rgba(72, 72, 96, 0.55);
+  --thumb-bg: #2c2346;
+  --radius: 10px;
+  --navh: 86px;
+  --galaxy-image: url("https://images.pexels.com/photos/176851/pexels-photo-176851.jpeg?auto=compress&cs=tinysrgb&w=1600");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.mainNav,
+.brandLink,
+.navLayout,
+.navActions {
+  display: flex;
+  align-items: center;
+}
+
+.mainNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--navh);
+  padding: 0.25rem 1.5rem;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: 0.3s;
+}
+
+.mainNav.isSolid {
+  background: var(--bg);
+  border-bottom-color: rgba(128, 128, 128, 0.3);
+}
+
+.brandLink {
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.brandLogo {
+  width: 48px;
+  height: 48px;
+}
+
+.navLayout {
+  gap: 2.5rem;
+  width: 100%;
+}
+
+.navMenu,
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.navMenu {
+  gap: 2.2rem;
+}
+
+.navActions {
+  gap: 0.8rem;
+  margin-left: auto;
+}
+
+.navMenu a,
+.navButton,
+.footerLinks a {
+  transition: color 0.2s;
+}
+
+.navMenu a,
+.navButton {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.navMenu a:hover,
+.navButton:hover,
+.footerLinks a:hover,
+.sliderButton:hover {
+  color: var(--primary);
+}
+
+.navButton,
+.btn,
+.sliderButton {
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+.navButtonPrimary {
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: white;
+  transition:  0.3s;
+}
+
+.navButtonPrimary:hover {
+  background: var(--primary);
+  transform: translateY(-1px);
+}
+
+.navButtonPrimary:hover {
+  color: white;
+}
+
+.heroSection,
+.closingSection {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.heroSection {
+  min-height: 100vh;
+  padding-top: var(--navh);
+}
+
+.closingSection {
+  min-height: 420px;
+  padding: 2rem 0;
+}
+
+.heroBackground,
+.closingBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background-image: var(--galaxy-image);
+  background-position: center;
+  background-size: cover;
+  filter: saturate(0.55) brightness(0.5);
+}
+
+.heroBackground::after,
+.closingBackground::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(126, 60, 255, 0.18), rgba(88, 40, 200, 0.26));
+}
+
+.heroCopy,
+.closingContent {
+  position: relative;
+  z-index: 2;
+}
+
+.heroCopy {
+  max-width: 640px;
+}
+
+.closingContent {
+  max-width: 600px;
+}
+
+.heroSection h1 {
+  margin-bottom: 1rem;
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.heroText {
+  max-width: 720px;
+  margin: 0 auto 2rem;
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.heroBadge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  background: rgba(31, 32, 52, 0.78);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.heroActions,
+.closingActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.closingContent p {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.8rem;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btnPrimary {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(100, 40, 212, 0.28);
+}
+
+.btnPrimary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btnSecondary {
+  color: var(--text);
+  border: 1px solid rgba(100, 40, 212, 0.9);
+}
+
+.btnSecondary:hover {
+  background: rgba(100, 40, 212, 0.07);
+  border-color: var(--primary);
+}
+
+.section {
+  padding: 6rem 0;
+}
+
+.section h2,
+.closingContent h2 {
+  margin-bottom: 1rem;
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.sectionLead {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.cards,
+.quoteGrid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.quoteGrid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.card,
+.featuredStoryCard,
+.storyRow,
+.fandomTile {
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  transition: transform 0.25s;
+}
+
+.card,
+.quoteCard,
+.featuredStoryCard,
+.fandomTile {
+  border-radius: var(--radius);
+}
+
+.card,
+.quoteCard {
+  padding: 1.6rem;
+}
+
+.card {
+  text-align: center;
+}
+
+.card:hover,
+.featuredStoryCard:hover,
+.fandomTile:hover {
+  transform: translateY(-4px);
+}
+
+.card h3,
+.featuredStoryInfo h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.card p,
+.featuredStoryInfo p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.featureLayout,
+.libraryLayout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3rem;
+}
+
+.libraryLayout {
+  gap: 1.5rem;
+}
+
+.featureTextBlock,
+.featureVisual,
+.featuredStoryCard,
+.storyList {
+  min-width: 280px;
+}
+
+.featureTextBlock,
+.featureVisual,
+.storyList {
+  flex: 1;
+}
+
+.featuredStoryCard {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.featureVisual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.featureVisual::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  border: 1px solid rgba(126, 60, 255, 0.24);
+  border-radius: var(--radius);
+}
+
+.featureVisual img {
+  position: relative;
+  z-index: 1;
+  width: 70%;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  margin-top: 1.8rem;
+}
+
+.featureList li,
+.storyRow,
+.quoteAuthor {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  color: var(--muted);
+}
+
+.featureMarker,
+.storyThumb,
+.quoteAuthor .authorAvatar {
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
+.featureMarker {
+  width: 36px;
+  height: 36px;
+  background: rgba(126, 60, 255, 0.1);
+  color: var(--primary);
+}
+
+.featureList strong,
+.storyInfo strong,
+.fandomTile span {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.featureList strong,
+.storyInfo strong {
+  margin-bottom: 0.3rem;
+}
+
+.processSection {
+  padding: 7rem 0;
+}
+
+.processCard .stepBadge {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin: 0 auto 0.6rem;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.quoteCard {
+  text-align: left;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.quoteCard p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.quoteAuthor {
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.quoteAuthor .authorAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(126, 60, 255, 0.12);
+}
+
+.quoteAuthor span,
+.footerLinks,
+.footerCopy {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.comparisonPanels {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+}
+
+.comparisonSection .comparisonCard {
+  flex: 1;
+  padding: 1.8rem;
+  background: var(--card);
+}
+
+.comparisonSection .comparisonCard + .comparisonCard {
+  border-left: 2px solid var(--primary);
+}
+
+.comparisonSection .comparisonCard h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.comparisonSection .comparisonText {
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.comparisonSection .comparisonText p,
+.storyInfo p {
+  margin: 0;
+}
+
+.featuredStoryCover,
+.storyThumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--thumb-bg);
+  color: var(--muted);
+}
+
+.featuredStoryCover {
+  height: 260px;
+  font-size: 0.9rem;
+}
+
+.featuredStoryInfo {
+  padding: 1.4rem;
+}
+
+.storyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.storyRow {
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  border-radius: 6px;
+}
+
+.storyRow:hover {
+  transform: translateX(3px);
+}
+
+.storyThumb {
+  width: 46px;
+  height: 46px;
+  font-size: 0.7rem;
+}
+
+.storyInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.storyInfo p,
+.storyMeta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.storyMeta {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.fandomSlider {
+  position: relative;
+  padding: 0 50px;
+}
+
+.fandomTrack {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.fandomTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.sliderButton {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--text);
+  font-size: 1.2rem;
+  transform: translateY(-50%);
+  transition: 0.25s;
+}
+
+.sliderButton:hover {
+  background: rgba(126, 60, 255, 0.2);
+}
+
+.sliderButton.isPrev { left: 0; }
+.sliderButton.isNext { right: 0; }
+
+.fandomTile {
+  display: flex;
+  align-items: flex-end;
+  min-width: 200px;
+  height: 240px;
+  padding: 1rem;
+  flex-shrink: 0;
+}
+
+.footer {
+  padding: 1.5rem 0;
+  background: var(--card);
+}
+
+.footerLayout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .featureLayout,
+  .libraryLayout {
+    flex-direction: column;
+  }
+
+  .comparisonPanels {
+    flex-direction: column;
+  }
+
+  .comparisonSection .comparisonCard + .comparisonCard {
+    border-left: none;
+    border-top: 2px solid var(--primary);
+  }
+}
+
+@media (max-width: 768px) {
+  .navLayout,
+  .navMenu,
+  .navActions {
+    display: none;
+  }
+
+  .heroSection h1 {
+    font-size: 2.4rem;
+  }
+
+  .section h2,
+  .closingContent h2 {
+    font-size: 1.8rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection h1 {
+    font-size: 2rem;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
