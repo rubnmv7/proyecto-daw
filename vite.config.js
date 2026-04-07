@@ -5,7 +5,11 @@ export default defineConfig({
 	plugins: [vue()],
 	server: {
 		proxy: {
-			'/backend': 'http://localhost:8000',
+			'/backend': {
+				target: 'http://localhost',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/backend/, '/fanfia/backend'),
+			},
 		},
 	},
 });

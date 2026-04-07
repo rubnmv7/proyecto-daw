@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import logoUrl from '../../images/logo.svg'
 import LoginModal from './LoginModal.vue'
 
@@ -15,6 +15,18 @@ defineProps({
 })
 
 const showLogin = ref(false)
+const currentUser = ref(null)
+
+onMounted(async () => {
+	const res = await fetch('/backend/current_user.php')
+	const text = await res.text()
+	if (text !== 'no') currentUser.value = text
+})
+
+async function logout() {
+	await fetch('/backend/logout.php', { method: 'POST' })
+	window.location.reload()
+}
 </script>
 
 <template>
@@ -33,7 +45,11 @@ const showLogin = ref(false)
 
 			<div class="navActions">
 				<a href="#crear" class="navButton navButtonPrimary">Crear con IA</a>
-				<button class="navButton" @click="showLogin = true">Iniciar sesión</button>
+				<template v-if="currentUser">
+					<span class="navUser">{{ currentUser }}</span>
+					<button class="navButton" @click="logout">Cerrar sesión</button>
+				</template>
+				<button v-else class="navButton" @click="showLogin = true">Iniciar sesión</button>
 			</div>
 		</div>
 	</nav>

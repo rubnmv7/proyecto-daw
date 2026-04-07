@@ -28,7 +28,7 @@ $next_id = mysqli_fetch_assoc($r)['next_id'];
 $hash = password_hash($password, PASSWORD_DEFAULT);
 $fecha = date('Y-m-d');
 
-$stmt = mysqli_prepare($conexion, "INSERT INTO usuarios (ID_usuario, email, contraseña, nombre_usuario, tipo_usuario, fecha_creacion) VALUES (?, ?, ?, ?, 'Normal', ?)");
+$stmt = mysqli_prepare($conexion, "INSERT INTO usuarios (ID_usuario, email, `contraseña`, nombre_usuario, tipo_usuario, fecha_creacion) VALUES (?, ?, ?, ?, 'Normal', ?)");
 mysqli_stmt_bind_param($stmt, "issss", $next_id, $email, $hash, $nombre, $fecha);
 
 if (mysqli_stmt_execute($stmt)) {

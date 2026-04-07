@@ -150,6 +150,11 @@ img {
   color: white;
 }
 
+.navUser {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
 .heroSection,
 .closingSection {
   position: relative;
@@ -434,16 +439,15 @@ img {
 }
 
 .featureList strong,
-.storyInfo strong,
-.fandomTile span {
-  display: block;
-  color: var(--text);
-  font-weight: 600;
+.storyInfo strong {
+	display: block;
+	color: var(--text);
+	font-weight: 600;
 }
 
 .featureList strong,
 .storyInfo strong {
-  margin-bottom: 0.3rem;
+	margin-bottom: 0.3rem;
 }
 
 .processSection {
@@ -744,12 +748,41 @@ img {
 .sliderButton.isNext { right: 0; }
 
 .fandomTile {
-  display: flex;
-  align-items: flex-end;
-  min-width: 200px;
-  height: 240px;
-  padding: 1rem;
-  flex-shrink: 0;
+	position: relative;
+	min-width: 220px;
+	height: 320px;
+	flex-shrink: 0;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.fandomImg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.35s;
+}
+
+.fandomTile:hover .fandomImg {
+	transform: scale(1.06);
+}
+
+.fandomTile span {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 0.6rem 0.8rem;
+	background: rgba(10, 10, 20, 0.45);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	color: white;
+	font-weight: 600;
+	font-size: 0.85rem;
+	text-align: center;
 }
 
 .footer {

@@ -10,7 +10,7 @@ if (!$email || !$password) {
     exit;
 }
 
-$stmt = mysqli_prepare($conexion, "SELECT ID_usuario, email, contraseña, nombre_usuario, tipo_usuario FROM usuarios WHERE email = ? LIMIT 1");
+$stmt = mysqli_prepare($conexion, "SELECT ID_usuario, email, `contraseña`, nombre_usuario, tipo_usuario FROM usuarios WHERE email = ? LIMIT 1");
 mysqli_stmt_bind_param($stmt, "s", $email);
 mysqli_stmt_execute($stmt);
 $resultado = mysqli_stmt_get_result($stmt);

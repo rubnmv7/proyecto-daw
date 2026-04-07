@@ -2,8 +2,8 @@
 session_start();
 
 if (isset($_SESSION['user'])) {
-    echo 'ok';
+	echo $_SESSION['user']['nombre'];
 } else {
-    echo 'no';
+	echo 'no';
 }
 ?>

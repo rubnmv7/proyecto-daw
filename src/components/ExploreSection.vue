@@ -12,7 +12,7 @@ const trackRef = ref(null)
 
 function moveTrack(direction) {
 	if (!trackRef.value) return
-	trackRef.value.scrollBy({ left: direction * 240, behavior: 'smooth' })
+	trackRef.value.scrollBy({ left: direction * 260, behavior: 'smooth' })
 }
 </script>
 
@@ -23,8 +23,9 @@ function moveTrack(direction) {
 			<div class="fandomSlider">
 				<button class="sliderButton isPrev" type="button" @click="moveTrack(-1)">&#8592;</button>
 				<div ref="trackRef" class="fandomTrack">
-					<div v-for="(item, index) in fandomContent.items" :key="index" class="fandomTile">
-						<span>{{ item }}</span>
+				<div v-for="(item, index) in fandomContent.items" :key="index" class="fandomTile">
+						<img :src="item.img" :alt="item.name" class="fandomImg" />
+						<span>{{ item.name }}</span>
 					</div>
 				</div>
 				<button class="sliderButton isNext" type="button" @click="moveTrack(1)">&#8594;</button>
