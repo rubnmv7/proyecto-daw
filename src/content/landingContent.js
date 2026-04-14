@@ -1,15 +1,15 @@
 export const landingContent = {
 	menuLinks: [
-		{ label: 'Inicio', href: '#inicio' },
-		{ label: 'Cómo funciona', href: '#pasos' },
-		{ label: 'Explorar fandoms', href: '#explorar' },
-		{ label: 'Crear fanfic', href: '#crear' },
-		{ label: 'Planes', href: '#planes' },
+		{ label: 'Inicio', href: '/#inicio' },
+		{ label: 'Cómo funciona', href: '/#pasos' },
+		{ label: 'Explorar fandoms', href: '/#explorar' },
+		{ label: 'Crear fanfic', href: '/crear' },
+		{ label: 'Planes', href: '/#planes' },
 	],
-	heroContent: {
+		heroContent: {
 		title: 'Tu historia comienza aquí',
 		subtitle: 'Fanfia genera fanfics únicos bajo demanda: elige tu universo, estilo y longitud, y deja que la IA escriba por ti.',
-		primaryCta: { label: 'Crea tu fanfic ahora', href: '#crear' },
+		primaryCta: { label: 'Crea tu fanfic ahora', href: '/crear' },
 		secondaryCta: { label: 'Ver fanfics públicos', href: '#explorar' },
 		stats: 'X historias publicadas por el momento.',
 	},
@@ -132,7 +132,7 @@ export const landingContent = {
 	closingContent: {
 		title: 'Tu historia comienza aquí',
 		subtitle: 'Elige qué te apetece leer y genera tu próximo fanfic en cuestión de minutos.',
-		primaryCta: { label: 'Crea tu fanfic ahora', href: '#crear' },
+		primaryCta: { label: 'Crea tu fanfic ahora', href: '/crear' },
 		secondaryCta: { label: 'Explorar la comunidad', href: '#explorar' },
 	},
 	footerContent: {

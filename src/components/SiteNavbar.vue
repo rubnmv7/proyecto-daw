@@ -32,7 +32,7 @@ async function logout() {
 <template>
 	<nav class="mainNav" :class="{ isSolid: isNavSolid }">
 		<div class="container navLayout">
-			<a class="brandLink" href="#inicio" aria-label="Ir al inicio de Fanfia">
+			<a class="brandLink" href="/#inicio" aria-label="Ir al inicio de Fanfia">
 				<img :src="logoUrl" alt="Fanfia" class="brandLogo" />
 				<span>Fanfia</span>
 			</a>
@@ -44,7 +44,7 @@ async function logout() {
 			</ul>
 
 			<div class="navActions">
-				<a href="#crear" class="navButton navButtonPrimary">Crear con IA</a>
+				<a href="/crear" class="navButton navButtonPrimary">Crear con IA</a>
 				<template v-if="currentUser">
 					<span class="navUser">{{ currentUser }}</span>
 					<button class="navButton" @click="logout">Cerrar sesión</button>
