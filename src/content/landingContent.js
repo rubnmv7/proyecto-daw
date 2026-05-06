@@ -75,38 +75,7 @@ export const landingContent = {
 	},
 	previewContent: {
 		title: 'Tu biblioteca para guardar lo que sí quieres leer',
-		intro: 'Cada fanfic que generes se guardará aquí para que puedas releerlo, editarlo o crear nuevas versiones sin perder el contexto.',
-		featured: {
-			imageLabel: '',
-			title: '',
-			text: '',
-		},
-		items: [
-			{
-				title: '',
-				text: '',
-				views: 0,
-				likes: 0,
-			},
-			{
-				title: '',
-				text: '',
-				views: 0,
-				likes: 0,
-			},
-			{
-				title: '',
-				text: '',
-				views: 0,
-				likes: 0,
-			},
-			{
-				title: '',
-				text: '',
-				views: 0,
-				likes: 0,
-			},
-		],
+		intro: 'Los fanfics más leídos de la comunidad, generados con IA y guardados para que puedas volver a ellos cuando quieras.',
 	},
 	fandomContent: {
 		title: 'Explora por fandom',

@@ -1,10 +1,40 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+
 defineProps({
 	previewContent: {
 		type: Object,
 		required: true,
 	},
 })
+
+const fanfics = ref([])
+const cargando = ref(true)
+
+onMounted(async () => {
+	try {
+		const res = await fetch('/backend/top_fanfics.php?limit=6')
+		if (res.ok) {
+			fanfics.value = await res.json()
+		}
+	} catch (e) {
+		console.error(e)
+	} finally {
+		cargando.value = false
+	}
+})
+
+function estadoClass(estado) {
+	if (estado === 'Terminado') return 'done'
+	if (estado === 'En progreso') return 'progress'
+	return 'draft'
+}
+
+function estadoShort(estado) {
+	if (estado === 'Terminado') return '✓'
+	if (estado === 'En progreso') return '…'
+	return '✎'
+}
 </script>
 
 <template>
@@ -13,27 +43,51 @@ defineProps({
 			<h2>{{ previewContent.title }}</h2>
 			<p class="sectionLead">{{ previewContent.intro }}</p>
 			<div class="libraryLayout">
-				<article class="featuredStoryCard">
-					<div class="featuredStoryCover">{{ previewContent.featured.imageLabel }}</div>
-					<div class="featuredStoryInfo">
-						<h3>{{ previewContent.featured.title }}</h3>
-						<p>{{ previewContent.featured.text }}</p>
-					</div>
-				</article>
 				<div class="storyList">
-					<article v-for="(item, index) in previewContent.items" :key="index" class="storyRow">
-						<div class="storyThumb">Fanfic</div>
+					<div v-if="cargando" class="storyRow">
+						<p style="color: var(--muted);">Cargando fanfics…</p>
+					</div>
+					<article v-else-if="fanfics.length" v-for="item in fanfics" :key="item.id" class="storyRow">
+						<div class="storyThumb statusThumb" :class="estadoClass(item.estado)">
+							{{ estadoShort(item.estado) }}
+						</div>
 						<div class="storyInfo">
-							<strong>{{ item.title }}</strong>
-							<p>{{ item.text }}</p>
+							<strong>{{ item.titulo }}</strong>
+							<p>{{ item.descripcion || 'Sin descripción.' }}</p>
 							<div class="storyMeta">
-								<span class="storyMetaItem">👁 {{ item.views }}</span>
-								<span class="storyMetaItem">✔ {{ item.likes }}</span>
+								<span class="storyMetaItem">✍ {{ item.autor }}</span>
+								<span class="storyMetaItem">{{ item.capitulos }} caps</span>
+								<span class="storyMetaItem">✔ {{ item.valoraciones }}</span>
 							</div>
 						</div>
 					</article>
+					<div v-else class="storyRow">
+						<p style="color: var(--muted);">Aún no hay fanfics en la biblioteca.</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 </template>
+
+<style scoped>
+.statusThumb {
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+.statusThumb.done {
+	color: #34d399;
+	background: rgba(52, 211, 153, 0.12);
+}
+
+.statusThumb.progress {
+	color: #fbbf24;
+	background: rgba(251, 191, 36, 0.12);
+}
+
+.statusThumb.draft {
+	color: #94a3b8;
+	background: rgba(148, 163, 184, 0.12);
+}
+</style>

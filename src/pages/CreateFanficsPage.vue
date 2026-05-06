@@ -13,12 +13,52 @@ const duracion             = ref('medio')
 const pov                  = ref('Primera persona')
 const argumento            = ref('')
 const resultado            = ref('')
+const cargando             = ref(false)
+const error                = ref('')
 
 const universo = computed(() =>
   universoSeleccionado.value === '__otro__'
     ? universoCustom.value
     : universoSeleccionado.value
 )
+
+async function generar() {
+  cargando.value = true
+  error.value = ''
+  resultado.value = ''
+
+  const prompt = `Escribe un fanfic con las siguientes características:
+- Universo/Fandom: ${universo.value}
+- Personajes protagonistas: ${personajes.value}
+- Género: ${genero.value}
+- Tono: ${tono.value}
+- Punto de vista: ${pov.value}
+- Duración: ${duracion.value}
+${argumento.value ? '- Argumento: ' + argumento.value : ''}
+
+Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripciones.`
+
+  try {
+    const res = await fetch('/backend/generate.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    })
+
+    const data = await res.json()
+
+    if (data.error) {
+      error.value = data.error
+      return
+    }
+
+    resultado.value = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No se recibió texto de la IA.'
+  } catch (e) {
+    error.value = 'Error de conexión con el servidor.'
+  } finally {
+    cargando.value = false
+  }
+}
 </script>
 
 <template>
@@ -105,12 +145,16 @@ const universo = computed(() =>
           <h2>Tu fanfic</h2>
 
           <div class="result-area">
-            <pre v-if="resultado" class="result-text">{{ resultado }}</pre>
+            <p v-if="cargando" class="muted placeholder-message">Generando tu fanfic…</p>
+            <p v-else-if="error" class="err">{{ error }}</p>
+            <pre v-else-if="resultado" class="result-text">{{ resultado }}</pre>
             <p v-else class="muted placeholder-message">Rellena los campos y pulsa Generar.</p>
           </div>
 
           <div class="actions">
-            <button class="btn btnPrimary">Generar</button>
+            <button class="btn btnPrimary" @click="generar" :disabled="cargando">
+              {{ cargando ? 'Generando...' : 'Generar' }}
+            </button>
           </div>
         </div>
       </main>

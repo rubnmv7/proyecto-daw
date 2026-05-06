@@ -41,6 +41,7 @@ $options = [
         'method'  => 'POST',
         'header'  => "Content-Type: application/json\r\n",
         'content' => $body,
+        'timeout' => 60,
     ]
 ];
 
