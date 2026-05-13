@@ -1,6 +1,6 @@
 :root {
   --bg: #110c1f;
-  --card: #10101b;
+  --card: #1a1630;
   --primary: #7e3cff;
   --primary-dark: #6528d4;
   --text: #e6e9f5;
@@ -104,6 +104,19 @@ img {
 .navActions {
   gap: 0.8rem;
   margin-left: auto;
+  flex-shrink: 0;
+}
+
+.navActions .navButton,
+.navActions .navUser {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.navActions .navUser {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .navMenu a,
@@ -153,6 +166,7 @@ img {
 .navUser {
   font-size: 1rem;
   color: var(--muted);
+  display: inline-block;
 }
 
 .heroSection,
@@ -807,7 +821,7 @@ img {
 
 .footer {
   padding: 1.5rem 0;
-  background: var(--card);
+  background: var(--bg);
 }
 
 .footerLayout {

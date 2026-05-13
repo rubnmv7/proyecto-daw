@@ -1,26 +1,45 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { landingContent } from '../content/landingContent'
+import { ref, computed, onMounted } from 'vue'
 
-const fandoms = landingContent.fandomContent.items
-
-const universoSeleccionado = ref('')
-const universoCustom       = ref('')
+const universoFandom      = ref('')
 const personajes           = ref('')
-const genero               = ref('Romance')
 const tono                 = ref('Ligero')
 const duracion             = ref('medio')
 const pov                  = ref('Primera persona')
 const argumento            = ref('')
 const resultado            = ref('')
 const cargando             = ref(false)
+const guardando            = ref(false)
 const error                = ref('')
+const exito                = ref('')
+const tituloFanfic          = ref('')
+const generosDisponibles   = ref([])
+const generosSeleccionados = ref([])
 
-const universo = computed(() =>
-  universoSeleccionado.value === '__otro__'
-    ? universoCustom.value
-    : universoSeleccionado.value
-)
+onMounted(async () => {
+  try {
+    const res = await fetch('/backend/get_genres.php')
+    generosDisponibles.value = await res.json()
+  } catch (e) {}
+})
+
+const universo = computed(() => universoFandom.value)
+
+function toggleGenero(id) {
+  const idx = generosSeleccionados.value.indexOf(id)
+  if (idx > -1) {
+    generosSeleccionados.value.splice(idx, 1)
+  } else {
+    generosSeleccionados.value.push(id)
+  }
+}
+
+const generosPrompt = computed(() => {
+  return generosSeleccionados.value.map(id => {
+    const g = generosDisponibles.value.find(g => g.id === id)
+    return g ? g.nombre : ''
+  }).filter(Boolean).join(', ') || 'Sin género'
+})
 
 async function generar() {
   cargando.value = true
@@ -30,11 +49,15 @@ async function generar() {
   const prompt = `Escribe un fanfic con las siguientes características:
 - Universo/Fandom: ${universo.value}
 - Personajes protagonistas: ${personajes.value}
-- Género: ${genero.value}
+- Género: ${generosPrompt.value}
 - Tono: ${tono.value}
 - Punto de vista: ${pov.value}
 - Duración: ${duracion.value}
 ${argumento.value ? '- Argumento: ' + argumento.value : ''}
+
+Formato de respuesta:
+[TITULO: <título del fanfic>]
+<contenido del fanfic>
 
 Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripciones.`
 
@@ -53,10 +76,61 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
     }
 
     resultado.value = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No se recibió texto de la IA.'
+
+    if (resultado.value.startsWith('[TITULO:')) {
+      const firstLineEnd = resultado.value.indexOf(']')
+      if (firstLineEnd > 0) {
+        tituloFanfic.value = resultado.value.substring(9, firstLineEnd).trim()
+        resultado.value = resultado.value.substring(firstLineEnd + 1).trim()
+      }
+    }
   } catch (e) {
     error.value = 'Error de conexión con el servidor.'
   } finally {
     cargando.value = false
+  }
+}
+
+async function guardarFanfic() {
+  if (!tituloFanfic.value.trim()) {
+    error.value = 'Genera el contenido primero para obtener el título'
+    return
+  }
+  if (!resultado.value.trim()) {
+    error.value = 'Genera el contenido primero'
+    return
+  }
+
+  guardando.value = true
+  error.value = ''
+
+  try {
+    const res = await fetch('/backend/save_fanfic.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        titulo: tituloFanfic.value.trim(),
+        descripcion: '',
+        estado: 'Terminado',
+        generos: generosSeleccionados.value,
+        capitulo_titulo: 'Capítulo 1',
+        capitulo_contenido: resultado.value
+      })
+    })
+
+    const data = await res.json()
+
+    if (data.error) {
+      error.value = data.error
+      return
+    }
+
+    exito.value = 'Fanfic guardado correctamente'
+    setTimeout(() => window.location.href = `/fanfic/${data.id}`, 1500)
+  } catch (e) {
+    error.value = 'Error al guardar'
+  } finally {
+    guardando.value = false
   }
 }
 </script>
@@ -71,34 +145,12 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
 
           <label>
             Universo o fandom
-            <select class="field" v-model="universoSeleccionado">
-              <option value="">— Elige un fandom —</option>
-              <option v-for="f in fandoms" :key="f.name" :value="f.name">{{ f.name }}</option>
-              <option value="__otro__">Otro…</option>
-            </select>
-          </label>
-          <label v-if="universoSeleccionado === '__otro__'">
-            Escribe tu fandom
-            <input class="field" v-model="universoCustom" placeholder="Ej: Fullmetal Alchemist" />
+            <input class="field" v-model="universoFandom" placeholder="Ej: Fullmetal Alchemist, One Piece..." />
           </label>
 
           <label>
             Personajes protagonistas
             <input class="field" v-model="personajes" placeholder="Ej: Luffy, Kaneki..." />
-          </label>
-
-          <label>
-            Género
-            <select class="field" v-model="genero">
-              <option>Romance</option>
-              <option>Drama</option>
-              <option>Acción</option>
-              <option>Comedia</option>
-              <option>Misterio</option>
-              <option>Terror</option>
-              <option>Aventura</option>
-              <option>Fantasía</option>
-            </select>
           </label>
 
           <label>
@@ -121,8 +173,6 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
             </select>
           </label>
 
-          
-
           <label>
             Duración
             <select class="field" v-model="duracion">
@@ -137,6 +187,17 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
             <textarea class="field" v-model="argumento" rows="5"
               placeholder="Describe qué quieres que pase. Cuanto más detallado, mejor el resultado."></textarea>
           </label>
+
+          <label>
+            Géneros
+            <div class="generosGrid">
+              <span v-for="g in generosDisponibles" :key="g.id"
+                class="generoChip"
+                :class="{ selected: generosSeleccionados.includes(g.id) }"
+                @click="toggleGenero(g.id)">{{ g.nombre }}</span>
+              <span v-if="!generosDisponibles.length" class="muted">Cargando...</span>
+            </div>
+          </label>
         </div>
       </aside>
 
@@ -144,14 +205,22 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
         <div class="card panel result-panel">
           <h2>Tu fanfic</h2>
 
+          <div v-if="exito" class="exito">{{ exito }}</div>
+          <div v-if="error" class="err">{{ error }}</div>
+
           <div class="result-area">
             <p v-if="cargando" class="muted placeholder-message">Generando tu fanfic…</p>
-            <p v-else-if="error" class="err">{{ error }}</p>
             <pre v-else-if="resultado" class="result-text">{{ resultado }}</pre>
             <p v-else class="muted placeholder-message">Rellena los campos y pulsa Generar.</p>
           </div>
 
           <div class="actions">
+            <button class="btn btnSecondary" @click="navigator.clipboard.writeText(resultado)" :disabled="!resultado">
+              Copiar
+            </button>
+            <button class="btn btnPrimary" @click="guardarFanfic" :disabled="guardando || !resultado">
+              {{ guardando ? 'Guardando...' : 'Guardar' }}
+            </button>
             <button class="btn btnPrimary" @click="generar" :disabled="cargando">
               {{ cargando ? 'Generando...' : 'Generar' }}
             </button>
@@ -210,7 +279,6 @@ textarea.field {
   word-break: break-word;
 }
 
- 
 select.field option { background: var(--card); }
 
 .result-panel {
@@ -240,6 +308,7 @@ select.field option { background: var(--card); }
 
 .muted { color: var(--muted); margin: 0; }
 .err   { color: #f87171; margin: 0; }
+.exito { color: #10b981; margin-bottom: 1rem; }
 
 .placeholder-message {
   font-size: 1.06rem;
@@ -254,10 +323,40 @@ select.field option { background: var(--card); }
 .actions {
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
   margin-top: 1rem;
 }
 
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.generosGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.generoChip {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.generoChip:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.generoChip.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
 
 @media (max-width: 768px) {
   .layout { flex-direction: column; }

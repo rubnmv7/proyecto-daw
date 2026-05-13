@@ -6,10 +6,14 @@ import StepsSection from './components/StepsSection.vue'
 import CommunitySection from './components/CommunitySection.vue'
 import DifferenceSection from './components/DifferenceSection.vue'
 import SampleSection from './components/SampleSection.vue'
-import ExploreSection from './components/ExploreSection.vue'
+
 import CtaSection from './components/CtaSection.vue'
-import CreateFanficsPage from './pages/CreateFanficsPage.vue'
 import SiteFooter from './components/SiteFooter.vue'
+import CreateFanficsPage from './pages/CreateFanficsPage.vue'
+import MyFanficsPage from './pages/MyFanficsPage.vue'
+import FanficDetail from './pages/FanficDetail.vue'
+import ProfilePage from './pages/ProfilePage.vue'
+import ExplorePage from './pages/ExplorePage.vue'
 import { landingContent } from './content/landingContent'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
@@ -38,6 +42,10 @@ onBeforeUnmount(() => {
 <template>
 	<SiteNavbar :menu-links="landingContent.menuLinks" :is-nav-solid="isNavSolid" />
 	<CreateFanficsPage v-if="route === '/crear'" />
+	<MyFanficsPage v-else-if="route === '/mis-fanfics'" />
+	<FanficDetail v-else-if="route.startsWith('/fanfic/')" />
+	<ProfilePage v-else-if="route === '/perfil'" />
+	<ExplorePage v-else-if="route === '/explorar'" />
 	<div v-else>
 		<HeroSection :hero-content="landingContent.heroContent" />
 		<FeaturesSection :feature-content="landingContent.featureContent" />
@@ -45,7 +53,6 @@ onBeforeUnmount(() => {
 		<CommunitySection :quote-items="landingContent.quoteItems" />
 		<DifferenceSection :comparison-content="landingContent.comparisonContent" />
 		<SampleSection :preview-content="landingContent.previewContent" />
-		<ExploreSection :fandom-content="landingContent.fandomContent" />
 		<CtaSection :closing-content="landingContent.closingContent" />
 		<SiteFooter :footer-content="landingContent.footerContent" />
 	</div>

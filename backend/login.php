@@ -10,7 +10,7 @@ if (!$email || !$password) {
     exit;
 }
 
-$stmt = mysqli_prepare($conexion, "SELECT ID_usuario, email, `contraseña`, nombre_usuario, tipo_usuario FROM usuarios WHERE email = ? LIMIT 1");
+$stmt = mysqli_prepare($conexion, "SELECT ID_usuario, email, `contraseña`, nombre_usuario, tipo_usuario, foto_perfil FROM usuarios WHERE email = ? LIMIT 1");
 mysqli_stmt_bind_param($stmt, "s", $email);
 mysqli_stmt_execute($stmt);
 $resultado = mysqli_stmt_get_result($stmt);
@@ -31,7 +31,8 @@ $_SESSION['user'] = [
     'id' => $usuario['ID_usuario'],
     'email' => $usuario['email'],
     'nombre' => $usuario['nombre_usuario'],
-    'tipo' => $usuario['tipo_usuario']
+    'tipo' => $usuario['tipo_usuario'],
+    'foto' => $usuario['foto_perfil']
 ];
 
 echo 'ok';

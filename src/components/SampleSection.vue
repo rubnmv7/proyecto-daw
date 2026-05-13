@@ -35,6 +35,10 @@ function estadoShort(estado) {
 	if (estado === 'En progreso') return '…'
 	return '✎'
 }
+
+function verFanfic(id) {
+	window.location.href = `/fanfic/${id}`
+}
 </script>
 
 <template>
@@ -47,7 +51,7 @@ function estadoShort(estado) {
 					<div v-if="cargando" class="storyRow">
 						<p style="color: var(--muted);">Cargando fanfics…</p>
 					</div>
-					<article v-else-if="fanfics.length" v-for="item in fanfics" :key="item.id" class="storyRow">
+					<article v-else-if="fanfics.length" v-for="item in fanfics" :key="item.id" class="storyRow" @click="verFanfic(item.id)">
 						<div class="storyThumb statusThumb" :class="estadoClass(item.estado)">
 							{{ estadoShort(item.estado) }}
 						</div>
@@ -71,6 +75,10 @@ function estadoShort(estado) {
 </template>
 
 <style scoped>
+.storyRow {
+	cursor: pointer;
+}
+
 .statusThumb {
 	font-size: 1rem;
 	font-weight: 700;

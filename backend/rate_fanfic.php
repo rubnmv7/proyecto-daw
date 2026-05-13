@@ -1,0 +1,48 @@
+<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit;
+
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'No autenticado']);
+    exit;
+}
+
+require_once __DIR__ . '/../conexion.php';
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+$fanficId = (int) ($data['fanfic_id'] ?? 0);
+$tipo = $data['tipo'] ?? '';
+$comentario = trim($data['comentario'] ?? '');
+
+if ($fanficId === 0) {
+    http_response_code(400);
+    echo json_encode(['error' => 'ID de fanfic requerido']);
+    exit;
+}
+
+if (!in_array($tipo, ['Positiva', 'Negativa'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Tipo de valoración inválido']);
+    exit;
+}
+
+$fecha = date('Y-m-d');
+
+$sql = "INSERT INTO valoraciones (ID_fanfic, fecha_valoracion, comentario, tipo_valoracion) VALUES (?, ?, ?, ?)";
+$stmt = mysqli_prepare($conexion, $sql);
+mysqli_stmt_bind_param($stmt, 'isss', $fanficId, $fecha, $comentario, $tipo);
+
+if (mysqli_stmt_execute($stmt)) {
+    echo json_encode(['success' => true], JSON_UNESCAPED_UNICODE);
+} else {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error al guardar valoración']);
+}

@@ -1,9 +1,21 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+
 defineProps({
 	heroContent: {
 		type: Object,
 		required: true,
 	},
+})
+
+const totalFanfics = ref(0)
+
+onMounted(async () => {
+	try {
+		const res = await fetch('/backend/fanfic_count.php')
+		const data = await res.json()
+		totalFanfics.value = data.total || 0
+	} catch (e) {}
 })
 </script>
 
@@ -18,7 +30,7 @@ defineProps({
 					<a :href="heroContent.primaryCta.href" class="btn btnPrimary">{{ heroContent.primaryCta.label }}</a>
 					<a :href="heroContent.secondaryCta.href" class="btn btnSecondary">{{ heroContent.secondaryCta.label }}</a>
 				</div>
-				<div class="heroBadge">{{ heroContent.stats }}</div>
+				<div class="heroBadge">{{ totalFanfics.toLocaleString() }} historias publicadas por el momento.</div>
 			</div>
 		</div>
 	</header>

@@ -22,25 +22,23 @@ if (mysqli_fetch_assoc($resultado)) {
 }
 mysqli_stmt_close($stmt);
 
-$r = mysqli_query($conexion, "SELECT COALESCE(MAX(ID_usuario),0)+1 AS next_id FROM usuarios");
-$next_id = mysqli_fetch_assoc($r)['next_id'];
-
 $hash = password_hash($password, PASSWORD_DEFAULT);
 $fecha = date('Y-m-d');
 
-$stmt = mysqli_prepare($conexion, "INSERT INTO usuarios (ID_usuario, email, `contraseña`, nombre_usuario, tipo_usuario, fecha_creacion) VALUES (?, ?, ?, ?, 'Normal', ?)");
-mysqli_stmt_bind_param($stmt, "issss", $next_id, $email, $hash, $nombre, $fecha);
+$stmt = mysqli_prepare($conexion, "INSERT INTO usuarios (email, `contraseña`, nombre_usuario, tipo_usuario, fecha_creacion) VALUES (?, ?, ?, 'Normal', ?)");
+mysqli_stmt_bind_param($stmt, "ssss", $email, $hash, $nombre, $fecha);
 
 if (mysqli_stmt_execute($stmt)) {
+    $id = mysqli_insert_id($conexion);
     $_SESSION['user'] = [
-        'id' => $next_id,
+        'id' => $id,
         'email' => $email,
         'nombre' => $nombre,
-        'tipo' => 'Normal'
+        'tipo' => 'Normal',
+        'foto' => null
     ];
     echo 'ok';
 } else {
     echo 'error';
 }
 mysqli_stmt_close($stmt);
-?>
