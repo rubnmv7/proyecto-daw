@@ -51,7 +51,7 @@ try {
     $fanficId = mysqli_insert_id($conexion);
 
     if ($fanficId === 0) {
-        throw new Exception('No se pudo obtener el ID del fanfic. Ejecuta sql/auto_increment.sql en tu BD.');
+        throw new Exception('No se pudo obtener el ID del fanfic.');
     }
 
     foreach ($generos as $generoId) {
