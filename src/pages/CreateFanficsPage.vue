@@ -42,6 +42,19 @@ const generosPrompt = computed(() => {
 })
 
 async function generar() {
+  if (!universoFandom.value.trim()) {
+    error.value = 'El campo "Universo o fandom" es obligatorio'
+    return
+  }
+  if (!personajes.value.trim()) {
+    error.value = 'El campo "Personajes protagonistas" es obligatorio'
+    return
+  }
+  if (!generosSeleccionados.value.length) {
+    error.value = 'Selecciona al menos un género'
+    return
+  }
+
   cargando.value = true
   error.value = ''
   resultado.value = ''

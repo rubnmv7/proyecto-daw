@@ -166,4 +166,14 @@ h1 {
   padding: 0.25rem 0.65rem;
   border-radius: 20px;
 }
+
+@media (max-width: 768px) {
+  .filtros { flex-direction: column; }
+  .filtro-select { max-width: 100%; }
+  .grid { grid-template-columns: 1fr; }
+  .meta { flex-wrap: wrap; gap: 0.4rem; }
+  .page { padding: calc(var(--navh) + 1rem) 0 2rem; }
+  h1 { font-size: 1.5rem; }
+  .container { padding: 0 1rem; }
+}
 </style>

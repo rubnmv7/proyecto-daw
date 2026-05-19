@@ -35,24 +35,34 @@ async function cargarFanfic() {
 
 async function valorar(tipo) {
   valorando.value = true
+  error.value = ''
   try {
+    const form = new FormData()
+    form.append('fanfic_id', fanficId)
+    form.append('tipo', tipo)
+    form.append('comentario', comentario.value.trim())
+
     const res = await fetch('/backend/rate_fanfic.php', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fanfic_id: fanficId,
-        tipo: tipo,
-        comentario: comentario.value.trim()
-      })
+      body: form
     })
     const data = await res.json()
+    if (!res.ok) {
+      if (res.status === 401) {
+        window.location.href = '/'
+        return
+      }
+      error.value = data.error || 'Error al valorar'
+      return
+    }
     if (data.success) {
       comentario.value = ''
       mostrarInput.value = false
       await cargarFanfic()
     }
-  } catch (e) {}
-  finally {
+  } catch (e) {
+    error.value = 'Error de conexión'
+  } finally {
     valorando.value = false
   }
 }
@@ -232,4 +242,14 @@ function getEstadoColor(estado) {
 
 .comentario-texto { flex: 1; font-size: 0.85rem; }
 .comentario-fecha { font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+
+@media (max-width: 768px) {
+  .page { padding: calc(var(--navh) + 1rem) 0 2rem; }
+  .container { padding: 0 1rem; }
+  .fanfic-detail { padding: 1.25rem; }
+  .fanfic-header h1 { font-size: 1.3rem; }
+  .fanfic-header { flex-direction: column; gap: 0.75rem; }
+  .valorar-actions { flex-direction: column; }
+  .comentario { flex-wrap: wrap; }
+}
 </style>

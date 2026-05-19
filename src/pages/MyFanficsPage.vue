@@ -193,4 +193,13 @@ function getEstadoColor(estado) {
   color: var(--muted);
   margin-bottom: 1rem;
 }
+
+@media (max-width: 768px) {
+  .page { padding: calc(var(--navh) + 1rem) 0 2rem; }
+  .page-header .container { flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .page-header h1 { font-size: 1.5rem; }
+  .fanfics-grid { grid-template-columns: 1fr; }
+  .fanfic-header { flex-direction: column; gap: 0.5rem; }
+  .container { padding: 0 1rem; }
+}
 </style>

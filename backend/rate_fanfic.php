@@ -1,10 +1,5 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit;
 
 session_start();
 
@@ -16,11 +11,9 @@ if (!isset($_SESSION['user'])) {
 
 require_once __DIR__ . '/../conexion.php';
 
-$data = json_decode(file_get_contents('php://input'), true);
-
-$fanficId = (int) ($data['fanfic_id'] ?? 0);
-$tipo = $data['tipo'] ?? '';
-$comentario = trim($data['comentario'] ?? '');
+$fanficId = (int) ($_POST['fanfic_id'] ?? 0);
+$tipo = $_POST['tipo'] ?? '';
+$comentario = trim($_POST['comentario'] ?? '');
 
 if ($fanficId === 0) {
     http_response_code(400);

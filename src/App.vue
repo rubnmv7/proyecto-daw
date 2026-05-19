@@ -14,6 +14,7 @@ import MyFanficsPage from './pages/MyFanficsPage.vue'
 import FanficDetail from './pages/FanficDetail.vue'
 import ProfilePage from './pages/ProfilePage.vue'
 import ExplorePage from './pages/ExplorePage.vue'
+import AdminPage from './pages/AdminPage.vue'
 import { landingContent } from './content/landingContent'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
@@ -44,8 +45,9 @@ onBeforeUnmount(() => {
 	<CreateFanficsPage v-if="route === '/crear'" />
 	<MyFanficsPage v-else-if="route === '/mis-fanfics'" />
 	<FanficDetail v-else-if="route.startsWith('/fanfic/')" />
-	<ProfilePage v-else-if="route === '/perfil'" />
-	<ExplorePage v-else-if="route === '/explorar'" />
+<ProfilePage v-else-if="route === '/perfil'" />
+<ExplorePage v-else-if="route === '/explorar'" />
+<AdminPage v-else-if="route === '/admin'" />
 	<div v-else>
 		<HeroSection :hero-content="landingContent.heroContent" />
 		<FeaturesSection :feature-content="landingContent.featureContent" />

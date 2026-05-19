@@ -198,4 +198,10 @@ h1 {
 
 .err { color: #f87171; }
 .exito { color: #10b981; }
+
+@media (max-width: 768px) {
+  .page { padding: calc(var(--navh) + 1rem) 0 2rem; }
+  .container { padding: 0 1rem; }
+  .perfil-card { padding: 1.25rem; }
+}
 </style>
