@@ -1,4 +1,6 @@
 <?php
+// ── Comprueba si el usuario es admin ──
+// Devuelve los datos del admin o error si no tiene permisos
 session_start();
 header('Content-Type: application/json');
 

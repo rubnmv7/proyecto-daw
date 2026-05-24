@@ -1,4 +1,6 @@
 <?php
+// ── Lista de usuarios (admin) ──
+// Devuelve todos los usuarios con opción de búsqueda por nombre o email
 session_start();
 header('Content-Type: application/json');
 

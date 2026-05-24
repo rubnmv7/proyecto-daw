@@ -1,4 +1,6 @@
 <?php
+// ── Crear o editar un género (admin) ──
+// Si tiene ID actualiza, si no, crea uno nuevo
 session_start();
 header('Content-Type: application/json');
 

@@ -1,4 +1,6 @@
 <?php
+// ── Devuelve los datos del usuario logueado ──
+// El frontend lo usa para saber si hay sesión activa y quién es
 session_start();
 
 if (isset($_SESSION['user'])) {

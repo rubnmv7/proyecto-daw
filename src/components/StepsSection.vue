@@ -1,4 +1,6 @@
 <script setup>
+// ── Sección "Cómo funciona" ──
+// Muestra los 3 pasos para usar Fanfia con tarjetas numeradas
 defineProps({
 	stepItems: {
 		type: Array,

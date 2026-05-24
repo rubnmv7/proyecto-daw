@@ -1,4 +1,6 @@
 <script setup>
+// ── Página de explorar fanfics públicos ──
+// Muestra un buscador y listado de fanfics terminados de toda la comunidad
 import { ref, onMounted } from 'vue'
 
 const fanfics = ref([])
@@ -9,6 +11,7 @@ const cargando = ref(true)
 
 onMounted(() => cargar())
 
+// Pide los fanfics al backend, con filtros si los hay
 async function cargar() {
   cargando.value = true
   try {

@@ -1,4 +1,6 @@
 <script setup>
+// ── Página "Mis Fanfics" ──
+// Lista todos los fanfics del usuario logueado con sus estados
 import { ref, onMounted } from 'vue'
 
 const fanfics = ref([])
@@ -9,6 +11,7 @@ onMounted(async () => {
   await cargarFanfics()
 })
 
+// Pide los fanfics del usuario al backend
 async function cargarFanfics() {
   cargando.value = true
   error.value = ''
@@ -35,6 +38,7 @@ function verFanfic(id) {
   window.location.href = `/fanfic/${id}`
 }
 
+// Devuelve color según el estado del fanfic
 function getEstadoColor(estado) {
   const colores = {
     'Borrador': '#94a3b8',

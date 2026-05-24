@@ -1,4 +1,6 @@
 <script setup>
+// ── Cabecera principal de la landing ──
+// Muestra el título, subtítulo, botones CTA y el contador de fanfics
 import { ref, onMounted } from 'vue'
 
 defineProps({
@@ -10,6 +12,7 @@ defineProps({
 
 const totalFanfics = ref(0)
 
+// Al cargar, pide al backend cuántos fanfics hay publicados
 onMounted(async () => {
 	try {
 		const res = await fetch('/backend/fanfic_count.php')

@@ -1,4 +1,6 @@
 <?php
+// ── Obtener un fanfic completo ──
+// Devuelve todos los datos de un fanfic: info, capítulos, valoraciones y comentarios
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -16,6 +18,7 @@ if ($fanficId === 0) {
     exit;
 }
 
+// Datos básicos del fanfic con géneros
 $sql = "SELECT f.ID_fanfic, f.titulo, f.descripcion, f.estado, f.cantidad_capitulos, f.fecha_actualizacion,
                u.nombre_usuario as autor,
                GROUP_CONCAT(g.nombre_genero) as generos
@@ -43,6 +46,7 @@ if ($row = mysqli_fetch_assoc($result)) {
         'fecha_actualizacion' => $row['fecha_actualizacion']
     ];
 
+    // Capítulos del fanfic
     $sql = "SELECT ID_capitulo, titulo, numero_capitulo, longitud, contenido
             FROM capitulos
             WHERE ID_fanfic = ?
@@ -63,6 +67,7 @@ if ($row = mysqli_fetch_assoc($result)) {
         ];
     }
 
+    // Conteo de valoraciones positivas
     $sql = "SELECT COUNT(*) as total FROM valoraciones WHERE ID_fanfic = ? AND tipo_valoracion = 'Positiva'";
     $stmt = mysqli_prepare($conexion, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $fanficId);
@@ -70,6 +75,7 @@ if ($row = mysqli_fetch_assoc($result)) {
     $result = mysqli_stmt_get_result($stmt);
     $fanfic['positivas'] = (int) mysqli_fetch_assoc($result)['total'];
 
+    // Conteo de valoraciones negativas
     $sql = "SELECT COUNT(*) as total FROM valoraciones WHERE ID_fanfic = ? AND tipo_valoracion = 'Negativa'";
     $stmt = mysqli_prepare($conexion, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $fanficId);
@@ -77,6 +83,7 @@ if ($row = mysqli_fetch_assoc($result)) {
     $result = mysqli_stmt_get_result($stmt);
     $fanfic['negativas'] = (int) mysqli_fetch_assoc($result)['total'];
 
+    // Comentarios recientes
     $sql = "SELECT tipo_valoracion, comentario, fecha_valoracion FROM valoraciones WHERE ID_fanfic = ? AND comentario != '' ORDER BY fecha_valoracion DESC LIMIT 10";
     $stmt = mysqli_prepare($conexion, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $fanficId);

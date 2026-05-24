@@ -1,4 +1,6 @@
 <?php
+// ── Guardar fanfic en la BD ──
+// Crea un fanfic nuevo con su primer capítulo y géneros asociados
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -40,6 +42,7 @@ $fecha = date('Y-m-d');
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+// Transacción: inserta fanfic, géneros y capítulo
 try {
     mysqli_begin_transaction($conexion);
 
@@ -54,6 +57,7 @@ try {
         throw new Exception('No se pudo obtener el ID del fanfic.');
     }
 
+    // Asocia los géneros seleccionados
     foreach ($generos as $generoId) {
         $generoId = (int) $generoId;
         $sql = "INSERT INTO tienen (ID_fanfic, ID_genero) VALUES (?, ?)";
@@ -62,6 +66,7 @@ try {
         mysqli_stmt_execute($stmt);
     }
 
+    // Inserta el primer capítulo
     if (!empty($capitulo_contenido)) {
         $longitud = mb_strlen($capitulo_contenido);
         $sql = "INSERT INTO capitulos (ID_fanfic, titulo, contenido, numero_capitulo, longitud)

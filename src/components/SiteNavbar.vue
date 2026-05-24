@@ -1,4 +1,7 @@
 <script setup>
+// ── Barra de navegación principal ──
+// Muestra logo, enlaces, y usuario logueado (con menú desplegable)
+// También incluye el modal de login y el menú responsive para móvil
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import logoUrl from '../../images/logo.svg'
 import LoginModal from './LoginModal.vue'
@@ -27,6 +30,7 @@ function cerrarMobileMenu(e) {
 	if (!e.target.closest('.mainNav')) showMobileMenu.value = false
 }
 
+// Al cargar, comprueba si hay sesión activa
 onMounted(async () => {
 	const res = await fetch('/backend/current_user.php')
 	const text = await res.text()
@@ -40,6 +44,7 @@ onBeforeUnmount(() => {
 	document.removeEventListener('click', cerrarMobileMenu)
 })
 
+// Cierra la sesión del usuario
 async function logout() {
 	await fetch('/backend/logout.php', { method: 'POST' })
 	window.location.reload()
@@ -228,7 +233,6 @@ function toggleDropdown() {
 	transform: translateY(-7px) rotate(-45deg);
 }
 
-/* ── Mobile menu ── */
 .mobileMenu {
 	position: absolute;
 	top: var(--navh);

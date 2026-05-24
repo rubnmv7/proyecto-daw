@@ -1,4 +1,6 @@
 <?php
+// ── Lista de fanfics (admin) ──
+// Devuelve todos los fanfics con búsqueda y filtro por estado
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');

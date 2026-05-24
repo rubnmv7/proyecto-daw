@@ -1,10 +1,12 @@
 <?php
+// ── Top fanfics más valorados ──
+// Devuelve los fanfics con más valoraciones, usado en la landing y panel admin
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 
 require_once __DIR__ . '/../conexion.php';
 
-$limit = $_GET['limit'] ?? 10;
+$limit = (int)($_GET['limit'] ?? 10);
 
 $sql = "SELECT f.ID_fanfic, f.titulo, f.descripcion, f.estado, f.cantidad_capitulos,
                u.nombre_usuario AS autor,

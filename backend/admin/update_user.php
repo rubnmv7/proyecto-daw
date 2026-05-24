@@ -1,4 +1,6 @@
 <?php
+// ── Editar un usuario (admin) ──
+// Actualiza nombre, email y tipo de un usuario desde el panel admin
 session_start();
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');

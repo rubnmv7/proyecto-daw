@@ -1,4 +1,6 @@
 <script setup>
+// ── Página de detalle del fanfic ──
+// Muestra el título, autor, géneros, capítulos y valoraciones de un fanfic
 import { ref, onMounted } from 'vue'
 
 const pathParts = window.location.pathname.split('/')
@@ -15,6 +17,7 @@ onMounted(async () => {
   await cargarFanfic()
 })
 
+// Carga los datos completos del fanfic desde el backend
 async function cargarFanfic() {
   cargando.value = true
   error.value = ''
@@ -33,6 +36,7 @@ async function cargarFanfic() {
   }
 }
 
+// Envía una valoración (Positiva/Negativa) al backend
 async function valorar(tipo) {
   valorando.value = true
   error.value = ''
@@ -71,6 +75,7 @@ function volver() {
   window.location.href = '/mis-fanfics'
 }
 
+// Devuelve color según el estado del fanfic
 function getEstadoColor(estado) {
   const colores = {
     'Borrador': '#94a3b8',

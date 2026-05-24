@@ -1,4 +1,6 @@
 <script setup>
+// ── Preview de fanfics populares (landing) ──
+// Carga y muestra los 6 fanfics más valorados de la comunidad
 import { ref, onMounted } from 'vue'
 
 defineProps({
@@ -11,6 +13,7 @@ defineProps({
 const fanfics = ref([])
 const cargando = ref(true)
 
+// Pide al backend los fanfics más valorados al cargar
 onMounted(async () => {
 	try {
 		const res = await fetch('/backend/top_fanfics.php?limit=6')
@@ -24,12 +27,14 @@ onMounted(async () => {
 	}
 })
 
+// Devuelve clase CSS según el estado del fanfic
 function estadoClass(estado) {
 	if (estado === 'Terminado') return 'done'
 	if (estado === 'En progreso') return 'progress'
 	return 'draft'
 }
 
+// Icono corto para cada estado
 function estadoShort(estado) {
 	if (estado === 'Terminado') return '✓'
 	if (estado === 'En progreso') return '…'

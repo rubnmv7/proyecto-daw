@@ -1,4 +1,6 @@
 <script setup>
+// ── Pie de página ──
+// Muestra el copyright y enlaces legales
 defineProps({
 	footerContent: {
 		type: Object,

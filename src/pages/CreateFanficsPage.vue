@@ -1,21 +1,27 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-const universoFandom      = ref('')
-const personajes           = ref('')
-const tono                 = ref('Ligero')
-const duracion             = ref('medio')
-const pov                  = ref('Primera persona')
-const argumento            = ref('')
-const resultado            = ref('')
-const cargando             = ref(false)
-const guardando            = ref(false)
-const error                = ref('')
-const exito                = ref('')
-const tituloFanfic          = ref('')
-const generosDisponibles   = ref([])
-const generosSeleccionados = ref([])
+// ─────────────── DATOS DEL FORMULARIO ───────────────
+// Cada uno de estos campos se rellena en el formulario de la izquierda
+const universoFandom      = ref('')     // El universo o fandom
+const personajes           = ref('')     // Personajes que aparecerán
+const tono                 = ref('Ligero')  // Tono de la historia
+const duracion             = ref('medio')   // Longitud del fanfic
+const pov                  = ref('Primera persona')  // Punto de vista narrativo
+const argumento            = ref('')     // Argumento opcional detallado
+const resultado            = ref('')     // Aquí se guarda el texto generado por la IA
+const cargando             = ref(false)  // Mientras la IA está generando
+const guardando            = ref(false)  // Mientras se guarda en la BD
+const error                = ref('')     // Mensajes de error
+const exito                = ref('')     // Mensajes de éxito al guardar
+const tituloFanfic          = ref('')    // Título extraído de la respuesta de la IA
 
+// ─────────────── GÉNEROS ───────────────
+// Se cargan desde la base de datos al entrar en la página
+const generosDisponibles   = ref([])     // Lista de géneros que viene del backend
+const generosSeleccionados = ref([])     // IDs de los géneros que el usuario ha marcado
+
+// Al cargar la página, pedimos los géneros al servidor
 onMounted(async () => {
   try {
     const res = await fetch('/backend/get_genres.php')
@@ -25,6 +31,7 @@ onMounted(async () => {
 
 const universo = computed(() => universoFandom.value)
 
+// Marca o desmarca un género cuando el usuario hace click en un chip
 function toggleGenero(id) {
   const idx = generosSeleccionados.value.indexOf(id)
   if (idx > -1) {
@@ -34,6 +41,8 @@ function toggleGenero(id) {
   }
 }
 
+// Convierte los IDs de géneros seleccionados a nombres separados por coma
+// Esto se usa después para construir el prompt que se manda a la IA
 const generosPrompt = computed(() => {
   return generosSeleccionados.value.map(id => {
     const g = generosDisponibles.value.find(g => g.id === id)
@@ -41,7 +50,11 @@ const generosPrompt = computed(() => {
   }).filter(Boolean).join(', ') || 'Sin género'
 })
 
+// ─────────────── GENERAR FANFIC ───────────────
+// Esta función se ejecuta al pulsar el botón "Generar"
+// Valida los campos obligatorios, construye el prompt y lo envía a Gemini
 async function generar() {
+  // Validación: el usuario debe rellenar los campos obligatorios
   if (!universoFandom.value.trim()) {
     error.value = 'El campo "Universo o fandom" es obligatorio'
     return
@@ -59,6 +72,8 @@ async function generar() {
   error.value = ''
   resultado.value = ''
 
+  // Construye el prompt con todos los datos del formulario
+  // Este texto se enviará a Gemini para que genere el fanfic
   const prompt = `Escribe un fanfic con las siguientes características:
 - Universo/Fandom: ${universo.value}
 - Personajes protagonistas: ${personajes.value}
@@ -74,6 +89,7 @@ Formato de respuesta:
 
 Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripciones.`
 
+  // Envía el prompt al backend PHP, que a su vez lo manda a Gemini
   try {
     const res = await fetch('/backend/generate.php', {
       method: 'POST',
@@ -83,13 +99,17 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
 
     const data = await res.json()
 
+    // Si el backend devuelve un error, lo mostramos
     if (data.error) {
       error.value = data.error
       return
     }
 
-    resultado.value = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No se recibió texto de la IA.'
+    // El texto generado viene en data.text (el backend ya extrajo la respuesta de Gemini)
+    resultado.value = data.text ?? 'No se recibió texto de la IA.'
 
+    // El prompt le pide a Gemini que devuelva el título entre [TITULO: ...]
+    // Aquí extraemos ese título para mostrarlo aparte
     if (resultado.value.startsWith('[TITULO:')) {
       const firstLineEnd = resultado.value.indexOf(']')
       if (firstLineEnd > 0) {
@@ -104,6 +124,9 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
   }
 }
 
+// ─────────────── GUARDAR EN BD ───────────────
+// Guarda el fanfic generado en la base de datos
+// Se envía el título, contenido y géneros al backend
 async function guardarFanfic() {
   if (!tituloFanfic.value.trim()) {
     error.value = 'Genera el contenido primero para obtener el título'
@@ -138,6 +161,7 @@ async function guardarFanfic() {
       return
     }
 
+    // Si se guardó correctamente, redirige a la página del fanfic
     exito.value = 'Fanfic guardado correctamente'
     setTimeout(() => window.location.href = `/fanfic/${data.id}`, 1500)
   } catch (e) {
@@ -149,23 +173,29 @@ async function guardarFanfic() {
 </script>
 
 <template>
+  <!-- ═══ PÁGINA DE CREACIÓN ═══ -->
+  <!-- Layout de dos columnas: izquierda formulario, derecha resultado -->
   <div class="section">
     <div class="container layout">
 
+      <!-- ─── COLUMNA IZQUIERDA: formulario de configuración ─── -->
       <aside>
         <div class="card panel">
           <h3>Configura tu fanfic</h3>
 
+          <!-- Campo: universo o fandom -->
           <label>
             Universo o fandom
             <input class="field" v-model="universoFandom" placeholder="Ej: Fullmetal Alchemist, One Piece..." />
           </label>
 
+          <!-- Campo: personajes -->
           <label>
             Personajes protagonistas
             <input class="field" v-model="personajes" placeholder="Ej: Luffy, Kaneki..." />
           </label>
 
+          <!-- Campo: tono de la historia -->
           <label>
             Tono
             <select class="field" v-model="tono">
@@ -178,6 +208,7 @@ async function guardarFanfic() {
             </select>
           </label>
 
+          <!-- Campo: punto de vista narrativo -->
           <label>
             Punto de vista (POV)
             <select class="field" v-model="pov">
@@ -186,6 +217,7 @@ async function guardarFanfic() {
             </select>
           </label>
 
+          <!-- Campo: duración / longitud -->
           <label>
             Duración
             <select class="field" v-model="duracion">
@@ -195,12 +227,14 @@ async function guardarFanfic() {
             </select>
           </label>
 
+          <!-- Campo: argumento o situación inicial (opcional) -->
           <label>
             Argumento o situación inicial
             <textarea class="field" v-model="argumento" rows="5"
               placeholder="Describe qué quieres que pase. Cuanto más detallado, mejor el resultado."></textarea>
           </label>
 
+          <!-- Campo: selección de géneros -->
           <label>
             Géneros
             <div class="generosGrid">
@@ -214,19 +248,23 @@ async function guardarFanfic() {
         </div>
       </aside>
 
+      <!-- ─── COLUMNA DERECHA: resultado y acciones ─── -->
       <main>
         <div class="card panel result-panel">
           <h2>Tu fanfic</h2>
 
+          <!-- Mensajes de éxito o error -->
           <div v-if="exito" class="exito">{{ exito }}</div>
           <div v-if="error" class="err">{{ error }}</div>
 
+          <!-- Área donde se muestra el fanfic generado -->
           <div class="result-area">
             <p v-if="cargando" class="muted placeholder-message">Generando tu fanfic…</p>
             <pre v-else-if="resultado" class="result-text">{{ resultado }}</pre>
             <p v-else class="muted placeholder-message">Rellena los campos y pulsa Generar.</p>
           </div>
 
+          <!-- Botones de acción: copiar, guardar, generar -->
           <div class="actions">
             <button class="btn btnSecondary" @click="navigator.clipboard.writeText(resultado)" :disabled="!resultado">
               Copiar

@@ -1,4 +1,6 @@
 <?php
+// ── Lista los fanfics del usuario logueado ──
+// Devuelve todos los fanfics del usuario con sus géneros
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');

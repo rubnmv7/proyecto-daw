@@ -1,4 +1,6 @@
 <?php
+// ── Estadísticas del dashboard de administración ──
+// Devuelve conteos totales, fanfics por estado, usuarios por mes y top fanfics
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
@@ -14,18 +16,21 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['tipo'] !== 'Admin') {
 
 include __DIR__ . '/../../conexion.php';
 
+// Totales generales
 $totalUsers       = (int) mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as c FROM usuarios"))['c'];
 $totalFanfics     = (int) mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as c FROM fanfics"))['c'];
 $totalValoraciones = (int) mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as c FROM valoraciones"))['c'];
 $totalCapitulos   = (int) mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as c FROM capitulos"))['c'];
 $totalGeneros     = (int) mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as c FROM generos"))['c'];
 
+// Fanfics agrupados por estado
 $fanficsByEstado = [];
 $res = mysqli_query($conexion, "SELECT estado, COUNT(*) as c FROM fanfics GROUP BY estado");
 while ($row = mysqli_fetch_assoc($res)) {
     $fanficsByEstado[$row['estado']] = (int) $row['c'];
 }
 
+// Usuarios registrados por mes (últimos 6)
 $usersByMonth = [];
 $res = mysqli_query($conexion, "SELECT DATE_FORMAT(fecha_creacion, '%Y-%m') as mes, COUNT(*) as c FROM usuarios GROUP BY mes ORDER BY mes DESC LIMIT 6");
 while ($row = mysqli_fetch_assoc($res)) {
@@ -33,6 +38,7 @@ while ($row = mysqli_fetch_assoc($res)) {
 }
 $usersByMonth = array_reverse($usersByMonth);
 
+// Top 5 fanfics más valorados
 $topFanfics = [];
 $res = mysqli_query($conexion, "SELECT f.ID_fanfic, f.titulo, u.nombre_usuario as autor, COUNT(v.ID_valoracion) as total_val
                                 FROM fanfics f

@@ -1,26 +1,32 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+// ── Pestaña activa del panel ──
 const tab = ref('dashboard')
 const loading = ref(false)
 
 const authed = ref(false)
 
+// ── Dashboard ──
 const stats = ref(null)
 
+// ── Usuarios ──
 const users = ref([])
 const userSearch = ref('')
 const editingUser = ref(null)
 const userForm = ref({ nombre: '', email: '', tipo: '' })
 
+// ── Fanfics ──
 const fanfics = ref([])
 const fanficSearch = ref('')
 const fanficEstado = ref('')
 
+// ── Géneros ──
 const genres = ref([])
 const genreInput = ref('')
 const editingGenre = ref(null)
 
+// Al entrar, comprueba que sea admin
 onMounted(async () => {
 	const res = await fetch('/backend/admin/check_admin.php')
 	if (!res.ok) {
@@ -31,6 +37,7 @@ onMounted(async () => {
 	cargarTab('dashboard')
 })
 
+// Cambia de pestaña y carga sus datos
 function cargarTab(t) {
 	tab.value = t
 	loading.value = true
@@ -41,7 +48,7 @@ function cargarTab(t) {
 	else loading.value = false
 }
 
-
+// Carga las estadísticas del dashboard
 async function cargarDashboard() {
 	const res = await fetch('/backend/admin/stats.php')
 	stats.value = await res.json()
@@ -208,6 +215,7 @@ function getEstadoColor(estado) {
 		<div class="container admin-body">
 			<div v-if="loading" class="loading">Cargando...</div>
 
+			<!-- ═══ DASHBOARD: estadísticas ─── -->
 			<div v-else-if="tab === 'dashboard' && stats">
 				<div class="stat-grid">
 					<div class="stat-card">
@@ -281,6 +289,7 @@ function getEstadoColor(estado) {
 				</div>
 			</div>
 
+			<!-- ═══ USUARIOS: listado y edición ─── -->
 			<div v-else-if="tab === 'usuarios'">
 				<div class="toolbar">
 					<input class="field" v-model="userSearch" placeholder="Buscar por nombre o email..." @input="cargarUsuarios" />
@@ -314,6 +323,7 @@ function getEstadoColor(estado) {
 				</table></div>
 			</div>
 
+			<!-- ═══ FANFICS: listado y filtros ─── -->
 			<div v-else-if="tab === 'fanfics'">
 				<div class="toolbar">
 					<input class="field" v-model="fanficSearch" placeholder="Buscar por título o autor..." @input="cargarFanfics" />
@@ -359,6 +369,7 @@ function getEstadoColor(estado) {
 				</table></div>
 			</div>
 
+			<!-- ═══ GÉNEROS: CRUD ─── -->
 			<div v-else-if="tab === 'generos'">
 				<div class="genre-form">
 					<input class="field" v-model="genreInput" :placeholder="editingGenre ? 'Nuevo nombre...' : 'Nuevo género...'"
@@ -433,6 +444,7 @@ function getEstadoColor(estado) {
 .admin-header h1 {
 	font-size: 1.5rem;
 	margin-bottom: 1rem;
+	color: var(--primary);
 }
 
 .admin-tabs {

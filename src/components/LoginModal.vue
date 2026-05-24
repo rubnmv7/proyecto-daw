@@ -1,14 +1,17 @@
 <script setup>
+// ── Modal de inicio de sesión / registro ──
+// Ventana emergente para loguearse o crear cuenta nueva
 import { ref } from 'vue'
 
 const emit = defineEmits(['close'])
 
-const mode = ref('login')
+const mode = ref('login')       // 'login' o 'register'
 const email = ref('')
 const password = ref('')
 const username = ref('')
 const errorMsg = ref('')
 
+// Envía los datos de login al backend
 async function handleLogin() {
 	errorMsg.value = ''
 
@@ -28,6 +31,7 @@ async function handleLogin() {
 	}
 }
 
+// Envía los datos de registro al backend
 async function handleRegister() {
 	errorMsg.value = ''
 
@@ -53,6 +57,7 @@ function handleSubmit() {
 	else handleRegister()
 }
 
+// Cambia entre modo login y modo registro
 function toggleMode() {
 	errorMsg.value = ''
 	mode.value = mode.value === 'login' ? 'register' : 'login'

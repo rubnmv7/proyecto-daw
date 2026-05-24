@@ -1,4 +1,6 @@
 <?php
+// ── Eliminar un género (admin) ──
+// Solo se puede eliminar si ningún fanfic lo está usando
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
@@ -23,6 +25,7 @@ if ($genreId === 0) {
     exit;
 }
 
+// Comprueba si algún fanfic usa este género
 $check = mysqli_query($conexion, "SELECT COUNT(*) as cnt FROM tienen WHERE ID_genero = $genreId");
 $count = (int) mysqli_fetch_assoc($check)['cnt'];
 

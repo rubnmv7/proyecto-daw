@@ -1,4 +1,6 @@
 <?php
+// ── Eliminar un usuario (admin) ──
+// Borra usuario, sus fanfics, valoraciones y capítulos en cascada
 session_start();
 header('Content-Type: application/json');
 
@@ -16,6 +18,7 @@ if ($userId === 0) {
     exit;
 }
 
+// Evita que el admin se elimine a sí mismo
 if ($userId === (int) $_SESSION['user']['id']) {
     echo json_encode(['error' => 'No puedes eliminarte a ti mismo']);
     exit;
@@ -23,6 +26,7 @@ if ($userId === (int) $_SESSION['user']['id']) {
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+// Transacción para borrar en orden: valoraciones, géneros, capítulos, fanfics, usuario
 try {
     mysqli_begin_transaction($conexion);
 

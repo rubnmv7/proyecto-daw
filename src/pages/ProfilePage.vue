@@ -1,4 +1,6 @@
 <script setup>
+// ── Página de perfil de usuario ──
+// Permite al usuario cambiar su nombre, email y foto de perfil
 import { ref, onMounted } from 'vue'
 
 const usuario = ref(null)
@@ -10,6 +12,7 @@ const guardando = ref(false)
 const error = ref('')
 const exito = ref('')
 
+// Carga los datos del usuario al entrar
 onMounted(async () => {
   const res = await fetch('/backend/current_user.php')
   const text = await res.text()
@@ -24,6 +27,7 @@ onMounted(async () => {
   cargando.value = false
 })
 
+// Guarda los cambios del perfil en el backend
 async function guardar() {
   if (!nombre.value.trim() || !email.value.trim()) {
     error.value = 'Todos los campos son obligatorios'

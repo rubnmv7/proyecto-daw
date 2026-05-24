@@ -1,4 +1,6 @@
 <?php
+// ── Eliminar un fanfic (admin) ──
+// Borra un fanfic con sus valoraciones, géneros asociados y capítulos
 session_start();
 header('Content-Type: application/json');
 
@@ -18,6 +20,7 @@ if ($fanficId === 0) {
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+// Transacción: borra en orden para evitar errores de FK
 try {
     mysqli_begin_transaction($conexion);
     mysqli_query($conexion, "DELETE FROM valoraciones WHERE ID_fanfic = $fanficId");

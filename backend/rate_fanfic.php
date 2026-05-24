@@ -1,8 +1,11 @@
 <?php
+// ── Valorar un fanfic ──
+// Recibe un ID de fanfic, tipo (Positiva/Negativa) y comentario opcional
 header('Content-Type: application/json; charset=utf-8');
 
 session_start();
 
+// Solo usuarios logueados pueden valorar
 if (!isset($_SESSION['user'])) {
     http_response_code(401);
     echo json_encode(['error' => 'No autenticado']);
@@ -29,6 +32,7 @@ if (!in_array($tipo, ['Positiva', 'Negativa'])) {
 
 $fecha = date('Y-m-d');
 
+// Inserta la valoración en la base de datos
 $sql = "INSERT INTO valoraciones (ID_fanfic, fecha_valoracion, comentario, tipo_valoracion) VALUES (?, ?, ?, ?)";
 $stmt = mysqli_prepare($conexion, $sql);
 mysqli_stmt_bind_param($stmt, 'isss', $fanficId, $fecha, $comentario, $tipo);

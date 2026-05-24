@@ -1,4 +1,6 @@
 <?php
+// ── Lista de géneros (admin) ──
+// Muestra todos los géneros con el número de fanfics que los usan
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 

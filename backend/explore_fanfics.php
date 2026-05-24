@@ -1,4 +1,6 @@
 <?php
+// ── Explorar fanfics públicos ──
+// Busca fanfics por título/descripción y/o género, solo muestra terminados
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -15,6 +17,7 @@ $where = "WHERE f.estado = 'Terminado'";
 $params = [];
 $types = '';
 
+// Filtro por texto libre en título o descripción
 if ($buscar !== '') {
     $where .= " AND (f.titulo LIKE ? OR f.descripcion LIKE ?)";
     $like = "%$buscar%";
@@ -23,6 +26,7 @@ if ($buscar !== '') {
     $types .= 'ss';
 }
 
+// Filtro por género
 if ($genero > 0) {
     $where .= " AND EXISTS (SELECT 1 FROM tienen t2 WHERE t2.ID_fanfic = f.ID_fanfic AND t2.ID_genero = ?)";
     $params[] = $genero;
@@ -61,6 +65,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     ];
 }
 
+// También devuelve la lista de géneros para el filtro
 $sql_generos = "SELECT ID_genero, nombre_genero FROM generos ORDER BY nombre_genero";
 $result_generos = mysqli_query($conexion, $sql_generos);
 $generos_lista = [];

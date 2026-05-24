@@ -1,4 +1,6 @@
 <script setup>
+// ── Sección de cierre (CTA final) ──
+// Última llamada a la acción con botones para crear o explorar
 defineProps({
 	closingContent: {
 		type: Object,
