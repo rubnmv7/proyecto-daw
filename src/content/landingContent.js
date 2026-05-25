@@ -1,19 +1,19 @@
 export const landingContent = {
 	// ── Enlaces del menú de navegación ──
 	menuLinks: [
-		{ label: 'Inicio', href: '/#inicio' },
-		{ label: 'Cómo funciona', href: '/#pasos' },
-		{ label: 'Explorar fanfics', href: '/explorar' },
-		{ label: 'Crear fanfic', href: '/crear' },
-		{ label: 'Planes', href: '/#planes' },
+		{ label: 'Inicio', href: '#inicio' },
+		{ label: 'Cómo funciona', href: '#pasos' },
+		{ label: 'Explorar fanfics', href: '#/explorar' },
+		{ label: 'Crear fanfic', href: '#/crear' },
+		{ label: 'Planes', href: '#planes' },
 	],
 
 	// ── Hero: la parte de arriba con el título grande ──
 	heroContent: {
 		title: 'Tu historia comienza aquí',
 		subtitle: 'Fanfia genera fanfics únicos bajo demanda: elige tu universo, estilo y longitud, y deja que la IA escriba por ti.',
-		primaryCta: { label: 'Crea tu fanfic ahora', href: '/crear' },
-		secondaryCta: { label: 'Ver fanfics públicos', href: '/explorar' },
+		primaryCta: { label: 'Crea tu fanfic ahora', href: '#/crear' },
+		secondaryCta: { label: 'Ver fanfics públicos', href: '#/explorar' },
 		stats: 'historias publicadas por el momento.',
 	},
 
@@ -31,8 +31,8 @@ export const landingContent = {
 				text: 'Todos tus fanfics se guardan automáticamente en tu perfil para que puedas volver a leerlos cuando quieras.',
 			},
 			{
-				title: 'Añade más capítulos',
-				text: 'Si quieres seguir la historia, puedes generar capítulos adicionales con un solo click para alargar tu fanfic favorito.',
+				title: 'Un fanfic completo al instante',
+				text: 'Cada generación produce un fanfic completo y listo para leer, con su propio título y contenido, sin necesidad de esperar entregas.',
 			},
 		],
 	},
@@ -45,11 +45,11 @@ export const landingContent = {
 		},
 		{
 			title: 'La IA lo escribe al momento',
-			text: 'La IA genera el fanfic completo con capítulos en segundos, adaptado al tono y longitud que hayas elegido.',
+			text: 'La IA genera el fanfic completo en segundos, adaptado al tono y longitud que hayas elegido.',
 		},
 		{
 			title: 'Lee y sigue disfrutando',
-			text: 'Accede al fanfic desde tu perfil, valóralo y genera más capítulos cuando quieras seguir leyendo.',
+			text: 'Accede al fanfic desde tu perfil, valóralo y compártelo con otros lectores.',
 		},
 	],
 
@@ -177,8 +177,8 @@ Luffy miró al horizonte y sonrió.
 	closingContent: {
 		title: 'Tu historia comienza aquí',
 		subtitle: 'Elige qué te apetece leer y genera tu próximo fanfic en cuestión de segundos.',
-		primaryCta: { label: 'Crea tu fanfic ahora', href: '/crear' },
-		secondaryCta: { label: 'Explorar la comunidad', href: '/explorar' },
+		primaryCta: { label: 'Crea tu fanfic ahora', href: '#/crear' },
+		secondaryCta: { label: 'Explorar la comunidad', href: '#/explorar' },
 	},
 
 	// ── Footer: el pie de página con enlaces legales ──

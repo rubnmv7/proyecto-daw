@@ -31,11 +31,30 @@ async function cargarFanfics() {
 }
 
 function crearFanfic() {
-  window.location.href = '/crear'
+  location.hash = '#/crear'
 }
 
 function verFanfic(id) {
-  window.location.href = `/fanfic/${id}`
+  location.hash = `#/fanfic/${id}`
+}
+
+async function borrarFanfic(id, titulo) {
+  if (!confirm(`¿Eliminar "${titulo}"? No podrás recuperarlo.`)) return
+  try {
+    const res = await fetch('/backend/delete_fanfic.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    })
+    const data = await res.json()
+    if (data.error) {
+      alert('Error: ' + data.error)
+      return
+    }
+    fanfics.value = fanfics.value.filter(f => f.id !== id)
+  } catch (e) {
+    alert('Error al eliminar el fanfic')
+  }
 }
 
 // Devuelve color según el estado del fanfic
@@ -81,6 +100,7 @@ function getEstadoColor(estado) {
           <div v-if="fanfic.generos.length" class="generos">
             <span v-for="g in fanfic.generos" :key="g" class="genero-tag">{{ g }}</span>
           </div>
+          <button class="btnDelete" @click.stop="borrarFanfic(fanfic.id, fanfic.titulo)">Eliminar</button>
         </div>
       </div>
     </main>
@@ -131,6 +151,24 @@ function getEstadoColor(estado) {
 
 .fanfic-card:hover {
   transform: translateY(-4px);
+}
+
+.btnDelete {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  border: 1px solid rgba(248,113,113,0.3);
+  background: transparent;
+  color: #f87171;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btnDelete:hover {
+  background: rgba(248,113,113,0.1);
+  border-color: #f87171;
 }
 
 .fanfic-header {

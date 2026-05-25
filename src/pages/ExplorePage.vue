@@ -27,7 +27,7 @@ async function cargar() {
 }
 
 function verFanfic(id) {
-  window.location.href = `/fanfic/${id}`
+  location.hash = `#/fanfic/${id}`
 }
 </script>
 

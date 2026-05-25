@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS fanfics (
   ID_usuario          INT NOT NULL,
   titulo              VARCHAR(200) NOT NULL,
   descripcion         TEXT DEFAULT NULL,
-  estado              ENUM('Borrador', 'En progreso', 'Terminado') DEFAULT 'Borrador',
+  estado              ENUM('En progreso', 'Terminado') DEFAULT 'En progreso',
   cantidad_capitulos  INT DEFAULT 1,
   fecha_actualizacion DATE NOT NULL,
   FOREIGN KEY (ID_usuario) REFERENCES usuarios(ID_usuario) ON DELETE CASCADE

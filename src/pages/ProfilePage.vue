@@ -17,7 +17,7 @@ onMounted(async () => {
   const res = await fetch('/backend/current_user.php')
   const text = await res.text()
   if (text === 'no') {
-    window.location.href = '/'
+    location.hash = '#/'
     return
   }
   usuario.value = JSON.parse(text)

@@ -1,6 +1,6 @@
 <?php
 // ── Explorar fanfics públicos ──
-// Busca fanfics por título/descripción y/o género, solo muestra terminados
+// Busca fanfics por título/descripción y/o género, excluye borradores
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -13,7 +13,7 @@ require_once __DIR__ . '/../conexion.php';
 $buscar = trim($_GET['buscar'] ?? '');
 $genero = (int) ($_GET['genero'] ?? 0);
 
-$where = "WHERE f.estado = 'Terminado'";
+$where = "WHERE f.estado IN ('Terminado', 'En progreso')";
 $params = [];
 $types = '';
 

@@ -30,7 +30,7 @@ const editingGenre = ref(null)
 onMounted(async () => {
 	const res = await fetch('/backend/admin/check_admin.php')
 	if (!res.ok) {
-		window.location.href = '/'
+		location.hash = '#/'
 		return
 	}
 	authed.value = true

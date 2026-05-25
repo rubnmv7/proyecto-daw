@@ -58,7 +58,7 @@ function toggleDropdown() {
 <template>
 	<nav class="mainNav" :class="{ isSolid: isNavSolid }">
 		<div class="container navLayout">
-			<a href="/" class="brandLink" aria-label="Ir al inicio de Fanfia">
+			<a href="#/" class="brandLink" aria-label="Ir al inicio de Fanfia">
 				<img :src="logoUrl" alt="Fanfia" class="brandLogo" />
 				<span>Fanfia</span>
 			</a>
@@ -79,9 +79,9 @@ function toggleDropdown() {
 							<span class="arrow" :class="{ up: showDropdown }">▼</span>
 						</button>
 						<div v-if="showDropdown" class="dropdownMenu">
-							<a href="/perfil" class="dropdownItem">Configurar perfil</a>
-							<a href="/mis-fanfics" class="dropdownItem">Mis Fanfics</a>
-							<a v-if="currentUser?.tipo === 'Admin'" href="/admin" class="dropdownItem">Admin</a>
+							<a href="#/perfil" class="dropdownItem">Configurar perfil</a>
+							<a href="#/mis-fanfics" class="dropdownItem">Mis Fanfics</a>
+							<a v-if="currentUser?.tipo === 'Admin'" href="#/admin" class="dropdownItem">Admin</a>
 							<hr class="dropdownDivider" />
 							<button class="dropdownItem" @click="logout">Cerrar sesión</button>
 						</div>
@@ -105,9 +105,9 @@ function toggleDropdown() {
 			</ul>
 			<template v-if="currentUser">
 				<hr class="mobileDivider" />
-				<a href="/perfil" class="mobileNavLink" @click="showMobileMenu = false">Configurar perfil</a>
-				<a href="/mis-fanfics" class="mobileNavLink" @click="showMobileMenu = false">Mis Fanfics</a>
-				<a v-if="currentUser?.tipo === 'Admin'" href="/admin" class="mobileNavLink" @click="showMobileMenu = false">Admin</a>
+				<a href="#/perfil" class="mobileNavLink" @click="showMobileMenu = false">Configurar perfil</a>
+				<a href="#/mis-fanfics" class="mobileNavLink" @click="showMobileMenu = false">Mis Fanfics</a>
+				<a v-if="currentUser?.tipo === 'Admin'" href="#/admin" class="mobileNavLink" @click="showMobileMenu = false">Admin</a>
 				<hr class="mobileDivider" />
 				<button class="mobileNavLink mobileLogout" @click="logout">Cerrar sesión</button>
 			</template>

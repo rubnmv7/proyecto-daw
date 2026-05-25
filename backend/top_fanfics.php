@@ -11,7 +11,7 @@ $limit = (int)($_GET['limit'] ?? 10);
 $sql = "SELECT f.ID_fanfic, f.titulo, f.descripcion, f.estado, f.cantidad_capitulos,
                u.nombre_usuario AS autor,
                COUNT(v.ID_valoracion) AS total_val
-        FROM fanfics f
+         FROM fanfics f
         LEFT JOIN usuarios u ON f.ID_usuario = u.ID_usuario
         LEFT JOIN valoraciones v ON v.ID_fanfic = f.ID_fanfic
         GROUP BY f.ID_fanfic

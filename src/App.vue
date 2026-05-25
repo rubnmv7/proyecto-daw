@@ -22,11 +22,11 @@ import AdminPage from './pages/AdminPage.vue'
 import { landingContent } from './content/landingContent'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-const isNavSolid = ref(false) // fondo sólido al hacer scroll
-const route = ref(window.location.pathname || '/')
+const isNavSolid = ref(false)
+const route = ref(window.location.hash.replace(/^#/, '') || '/')
 
-function onPopState() {
-	route.value = window.location.pathname || '/'
+function onHashChange() {
+	route.value = window.location.hash.replace(/^#/, '') || '/'
 }
 
 function onScroll() {
@@ -35,12 +35,12 @@ function onScroll() {
 
 onMounted(() => {
 	window.addEventListener('scroll', onScroll)
-	window.addEventListener('popstate', onPopState)
+	window.addEventListener('hashchange', onHashChange)
 })
 
 onBeforeUnmount(() => {
 	window.removeEventListener('scroll', onScroll)
-	window.removeEventListener('popstate', onPopState)
+	window.removeEventListener('hashchange', onHashChange)
 })
 </script>
 

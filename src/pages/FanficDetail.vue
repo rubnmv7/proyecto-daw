@@ -3,7 +3,7 @@
 // Muestra el título, autor, géneros, capítulos y valoraciones de un fanfic
 import { ref, onMounted } from 'vue'
 
-const pathParts = window.location.pathname.split('/')
+const pathParts = location.hash.replace(/^#/, '').split('/')
 const fanficId = pathParts[2]
 
 const fanfic = ref(null)
@@ -53,7 +53,7 @@ async function valorar(tipo) {
     const data = await res.json()
     if (!res.ok) {
       if (res.status === 401) {
-        window.location.href = '/'
+        location.hash = '#/'
         return
       }
       error.value = data.error || 'Error al valorar'
@@ -72,7 +72,7 @@ async function valorar(tipo) {
 }
 
 function volver() {
-  window.location.href = '/mis-fanfics'
+  location.hash = '#/mis-fanfics'
 }
 
 // Devuelve color según el estado del fanfic

@@ -42,7 +42,7 @@ function estadoShort(estado) {
 }
 
 function verFanfic(id) {
-	window.location.href = `/fanfic/${id}`
+	location.hash = `#/fanfic/${id}`
 }
 </script>
 

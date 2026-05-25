@@ -15,6 +15,7 @@ const guardando            = ref(false)  // Mientras se guarda en la BD
 const error                = ref('')     // Mensajes de error
 const exito                = ref('')     // Mensajes de éxito al guardar
 const tituloFanfic          = ref('')    // Título extraído de la respuesta de la IA
+const descripcionFanfic     = ref('')    // Descripción corta extraída de la respuesta
 
 // ─────────────── GÉNEROS ───────────────
 // Se cargan desde la base de datos al entrar en la página
@@ -85,9 +86,10 @@ ${argumento.value ? '- Argumento: ' + argumento.value : ''}
 
 Formato de respuesta:
 [TITULO: <título del fanfic>]
+[DESCRIPCION: <frase corta de una línea que resuma el fanfic>]
 <contenido del fanfic>
 
-Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripciones.`
+Escribe un fanfic completo de un solo capítulo. Usa formato narrativo, con diálogos y descripciones.`
 
   // Envía el prompt al backend PHP, que a su vez lo manda a Gemini
   try {
@@ -108,15 +110,21 @@ Escribe el capítulo 1 completo. Usa formato narrativo, con diálogos y descripc
     // El texto generado viene en data.text (el backend ya extrajo la respuesta de Gemini)
     resultado.value = data.text ?? 'No se recibió texto de la IA.'
 
-    // El prompt le pide a Gemini que devuelva el título entre [TITULO: ...]
-    // Aquí extraemos ese título para mostrarlo aparte
-    if (resultado.value.startsWith('[TITULO:')) {
-      const firstLineEnd = resultado.value.indexOf(']')
-      if (firstLineEnd > 0) {
-        tituloFanfic.value = resultado.value.substring(9, firstLineEnd).trim()
-        resultado.value = resultado.value.substring(firstLineEnd + 1).trim()
-      }
+    // Extrae título y descripción de la respuesta
+    let resto = resultado.value
+    // TITULO
+    const titMatch = resto.match(/^\[TITULO:\s*(.*?)\]/)
+    if (titMatch) {
+      tituloFanfic.value = titMatch[1]
+      resto = resto.substring(titMatch[0].length).trim()
     }
+    // DESCRIPCION
+    const descMatch = resto.match(/^\[DESCRIPCION:\s*(.*?)\]/)
+    if (descMatch) {
+      descripcionFanfic.value = descMatch[1]
+      resto = resto.substring(descMatch[0].length).trim()
+    }
+    resultado.value = resto
   } catch (e) {
     error.value = 'Error de conexión con el servidor.'
   } finally {
@@ -146,7 +154,7 @@ async function guardarFanfic() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         titulo: tituloFanfic.value.trim(),
-        descripcion: '',
+        descripcion: descripcionFanfic.value.trim(),
         estado: 'Terminado',
         generos: generosSeleccionados.value,
         capitulo_titulo: 'Capítulo 1',
@@ -163,7 +171,7 @@ async function guardarFanfic() {
 
     // Si se guardó correctamente, redirige a la página del fanfic
     exito.value = 'Fanfic guardado correctamente'
-    setTimeout(() => window.location.href = `/fanfic/${data.id}`, 1500)
+    setTimeout(() => location.hash = `#/fanfic/${data.id}`, 1500)
   } catch (e) {
     error.value = 'Error al guardar'
   } finally {
