@@ -6,9 +6,9 @@
 
 INSERT INTO usuarios (ID_usuario, email, contraseña, nombre_usuario, tipo_usuario, foto_perfil, fecha_creacion)
 VALUES
-(1, 'admin@fanfia.com', '$2b$10$KeFTLVMSAZfNvR9t124rNOl7iNWT9reG4ZVm5r.NFAsSY2K06Htm6', 'AdminFanfia', 'Admin', NULL, '2026-01-15'),
-(2, 'autor@fanfia.com', '$2b$10$KeFTLVMSAZfNvR9t124rNOl7iNWT9reG4ZVm5r.NFAsSY2K06Htm6', 'LunaEscarlata', 'Normal', NULL, '2026-02-10'),
-(3, 'lector@fanfia.com', '$2b$10$KeFTLVMSAZfNvR9t124rNOl7iNWT9reG4ZVm5r.NFAsSY2K06Htm6', 'NocheEstelar', 'Normal', NULL, '2026-03-05');
+(1, 'admin@fanfia.com', '$2y$12$Y.qe2Yej5.I3fWOnJCB8G.5cYsRsn.komxJJxRK47NmXrtIpWoHFy', 'AdminFanfia', 'Admin', NULL, '2026-01-15'),
+(2, 'autor@fanfia.com', '$2y$12$Y.qe2Yej5.I3fWOnJCB8G.5cYsRsn.komxJJxRK47NmXrtIpWoHFy', 'LunaEscarlata', 'Normal', NULL, '2026-02-10'),
+(3, 'lector@fanfia.com', '$2y$12$Y.qe2Yej5.I3fWOnJCB8G.5cYsRsn.komxJJxRK47NmXrtIpWoHFy', 'NocheEstelar', 'Normal', NULL, '2026-03-05');
 
 INSERT INTO fanfics (ID_fanfic, ID_usuario, titulo, descripcion, estado, cantidad_capitulos, fecha_actualizacion)
 VALUES
